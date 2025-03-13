@@ -1,0 +1,30 @@
+#include <iostream>
+#include <cstdlib>
+
+void checkADUser(const std::string& username) {
+    std::string command = "powershell -Command \"Get-ADUser -Identity " + username + "\"";
+    system(command.c_str());
+}
+
+void unlockADAccount(const std::string& username) {
+    std::string command = "powershell -Command \"Unlock-ADAccount -Identity " + username + "\"";
+    system(command.c_str());
+}
+
+void resetPassword(const std::string& username, const std::string& newPassword) {
+    std::string command = "powershell -Command \"Set-ADAccountPassword -Identity " + username + 
+                          " -NewPassword (ConvertTo-SecureString '" + newPassword + "' -AsPlainText -Force)\"";
+    system(command.c_str());
+}
+
+int main() {
+    std::string username;
+    std::cout << "Enter AD username: ";
+    std::cin >> username;
+
+    checkADUser(username);
+    unlockADAccount(username);
+    resetPassword(username, "NewSecurePass123!");
+
+    return 0;
+}
